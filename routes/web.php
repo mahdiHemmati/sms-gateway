@@ -14,8 +14,3 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/sms', function () {
-    return Notification::route('kaveh_sms', '09100828158')
-    ->notify(new SmsNotification());
-});
