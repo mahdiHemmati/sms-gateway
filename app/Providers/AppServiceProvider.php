@@ -18,14 +18,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Notification::resolved(function (ChannelManager $service) {
-            $service->extend('kaveh_sms', function ($app) {
-                return new KavehNegarChannel(
-                    new KavenegarApi(config()->get('kavenegar.apikey')),
-                    config()->get('kavenegar.from')
-                );
-            });
-        });
+
     }
 
     /**

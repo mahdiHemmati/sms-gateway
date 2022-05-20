@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Channels\KavehNegarChannel;
 use App\Channels\Messages\SmsMessage;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,6 +28,20 @@ class SmsNotification extends Notification implements ShouldQueue
     {
         $this->to = $to;
         $this->message = $message;
+        $this->connection = 'redis';
+    }
+
+    /**
+     * Determine which queues should be used for each notification channel.
+     *
+     * @return array
+     */
+    public function viaQueues()
+    {
+        // php artisan queue:work redis --queue=sms-queue
+        return [
+            KavehNegarChannel::class => 'sms-queue',
+        ];
     }
 
     /**
@@ -37,7 +52,9 @@ class SmsNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['kaveh_sms'];
+        return [
+            KavehNegarChannel::class
+        ];
     }
 
     public function toSms($notifiable)

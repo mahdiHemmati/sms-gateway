@@ -6,9 +6,10 @@ namespace App\Channels;
 use App\Channels\Messages\SmsMessage;
 use Illuminate\Notifications\Notification;
 use GuzzleHttp\Client as HttpClient;
-use Kavenegar\KavenegarApi;
+use ghasedak\GhasedakApi;
+use Ghasedak\Laravel\GhasedakFacade;
 
-class KavehNegarChannel implements SmsChannelInterface
+class GhasedakChannel implements SmsChannelInterface
 {
 
     protected $kavenegar;
@@ -20,8 +21,7 @@ class KavehNegarChannel implements SmsChannelInterface
      */
     public function __construct()
     {
-        $this->from = config()->get('kavenegar.from');
-        $this->kavenegar = new KavenegarApi(config()->get('kavenegar.apikey'));
+        $this->from = config()->get('sms.ghasedak.from');
     }
 
     /**
@@ -37,9 +37,9 @@ class KavehNegarChannel implements SmsChannelInterface
         
         $message->to($message->to);
         if (!$message->to || $message->message) {
-            return;
+            return; 
         }
 
-        $this->kavenegar->Send($this->from, $message->to, $message->message);
+        GhasedakFacade::SendSimple($message->to, $message->message, $this->from);
     }
 }
